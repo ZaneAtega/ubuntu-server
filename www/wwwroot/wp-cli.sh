@@ -1,0 +1,1 @@
+sudo -u www-data -- php /www/wwwroot/wp-cli.phar core verify-checksums --path=/www/wwwroot/example.com

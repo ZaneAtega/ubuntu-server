@@ -1,0 +1,40 @@
+key_buffer_size = 0M
+query_cache_size = 0M
+
+# Larger in-memory temp tables = fewer disk writes = faster queries on large datasets
+tmp_table_size = 
+max_heap_table_size = 
+
+max_allowed_packet = 
+
+sort_buffer_size = 
+read_rnd_buffer_size = 
+join_buffer_size = 
+
+thread_stack = 
+binlog_cache_size = 
+
+thread_cache_size = 
+table_open_cache = 
+max_connections = 
+
+read_buffer = 
+# write_buffer = 
+
+innodb_ft_min_token_size = 
+ft_min_word_len = 
+
+# innodb_buffer_pool_instances = 
+innodb_buffer_pool_size = 
+innodb_log_buffer_size = 
+
+innodb_flush_method = O_DIRECT # InnoDB bypasses the OS filesystem cache and writes directly to disk
+# Avoids double buffering (InnoDB cache + OS cache)
+
+innodb_flush_neighbors = 0
+# When a page in memory has been modified but not yet written back to disk,
+# "If I'm writing page X, maybe pages x-1 and x+1 will be needed soon = write them together"
+# Historical HDD optimization
+
+innodb_file_per_table = 1 # Easier to reclaim disk space when dropping a table
+# 0: All tables share the same ibdata1
