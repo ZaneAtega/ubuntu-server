@@ -1,0 +1,14 @@
+[Unit]
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/www/s3
+ExecStart=/usr/bin/node /www/s3/index.js
+Restart=on-failure
+StandardOutput=append:/www/s3/app.log
+StandardError=append:/www/s3/app.log
+
+[Install]
+WantedBy=multi-user.target

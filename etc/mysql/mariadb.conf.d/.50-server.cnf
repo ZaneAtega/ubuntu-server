@@ -33,7 +33,7 @@ innodb_flush_method = O_DIRECT # InnoDB bypasses the OS filesystem cache and wri
 
 innodb_flush_neighbors = 0
 # When a page in memory has been modified but not yet written back to disk,
-# "If I'm writing page X, maybe pages x-1 and x+1 will be needed soon = write them together"
+# "If I'm writing page X, maybe pages x-1 and x+1 will be needed soon" = write them together
 # Historical HDD optimization
 
 innodb_file_per_table = 1 # Easier to reclaim disk space when dropping a table
