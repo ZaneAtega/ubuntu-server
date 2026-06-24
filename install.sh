@@ -16,7 +16,7 @@ mysql_secure_installation
 # Change the root password? n
 # Y
 
-apt install php8.3-fpm -y
+apt install php8.3-fpm php8.3-redis redis-server -y
 
 apt install phpmyadmin -y
 # <Ok>
