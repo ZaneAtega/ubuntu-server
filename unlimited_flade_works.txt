@@ -1,7 +1,7 @@
 apt install ufw -y
 ufw allow 22
 ufw allow 
-ufw allow from to any port proto tcp
+ufw allow from 123.123.123.123 to any port 123 proto tcp # phpMyAdmin
 ufw enable
 
 nano /etc/ssh/sshd_config
