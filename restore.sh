@@ -6,6 +6,8 @@ chown -R www-data:www-data /www/wwwroot
 find /www/wwwroot -type d -exec chmod 755 {} \;
 find /www/wwwroot -type f -exec chmod 644 {} \;
 
+unzip /www/backups/db.zip -d /www/backups/db
+
 # CREATE DATABASE, CREATE USER, GRANT, FLUSH PRIVILEGES
 
 # mysql -e "SELECT @@GLOBAL.autocommit, @@GLOBAL.unique_checks, @@GLOBAL.foreign_key_checks;"
@@ -16,7 +18,7 @@ SET GLOBAL unique_checks = 0;
 SET GLOBAL foreign_key_checks = 0;
 "
 
-pv example.sql.gz | gunzip | mysql -u foo -p bar
+pv /www/backups/db/example.sql.gz | gunzip | mysql -u foo -p bar
 
 mysql -e "
 COMMIT;
