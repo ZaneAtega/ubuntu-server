@@ -1,3 +1,2 @@
-truncate -s 0 /var/log/*.log
-truncate -s 0 /var/log/syslog
+find /var/log -type f -exec truncate -s 0 {} +
 journalctl --vacuum-time=1s
