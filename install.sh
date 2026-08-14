@@ -25,7 +25,7 @@ apt install phpmyadmin -y
 apt install certbot python3-certbot-nginx -y
 # certbot --nginx -d example.com
 
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
 apt install nodejs -y
 
 apt install pv zip rsync -y
