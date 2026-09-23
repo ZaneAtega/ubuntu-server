@@ -1,0 +1,1 @@
+find /www/wwwroot/*/wp-content/debug.log -type f -exec sh -c 'echo "===== $1 ====="; cat "$1"' _ {} \;
