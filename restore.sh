@@ -1,4 +1,4 @@
-unzip /www/backups/backups.zip -d /www/wwwroot
+unzip /www/backups/backups.zip -d /
 
 TMP_DIR=$(mktemp -d)
 unzip /www/backups/wordpress-*.zip -d "$TMP_DIR"
