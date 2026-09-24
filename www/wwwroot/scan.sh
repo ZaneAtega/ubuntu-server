@@ -8,7 +8,7 @@ find /www/wwwroot/*/ \
     -type d \( -name wp-admin -o -name wp-content -o -name wp-includes -o -path '*/.well-known/acme-challenge' \) -prune -o \( \
     -type f \
         ! -name '*.webp' ! -name '*.json' ! -name '*.html' ! -name '*.xml' ! -name 'wp-*.php' \
-        ! -name '.user.ini' ! -name 'index.php' ! -name 'license.txt' ! -name 'llms.txt' ! -name 'robots.txt' ! -name 'xmlrpc.php' -o \
+        ! -name '.user.ini' ! -name 'index.php' ! -name 'license.txt' ! -name 'robots.txt' ! -name 'xmlrpc.php' -o \
     -type l \) \
     -printf '%p\n' | sort -u
 
