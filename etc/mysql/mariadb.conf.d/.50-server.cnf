@@ -18,7 +18,7 @@ thread_cache_size =
 table_open_cache = 
 max_connections = 
 
-read_buffer = 
+read_buffer_size = 
 # write_buffer = 
 
 innodb_ft_min_token_size = 

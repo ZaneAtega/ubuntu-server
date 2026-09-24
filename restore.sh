@@ -1,6 +1,7 @@
-# scp -i "id_ed25519" -r "*.zip" root@:/www/backups
-
 unzip /www/backups/backups.zip -d /www/wwwroot
+
+bash /www/source/themes/import_themes_and_ssl.sh
+bash /www/source/source.sh
 
 chown -R www-data:www-data /www/wwwroot
 find /www/wwwroot -type d -exec chmod 755 {} \;
@@ -19,6 +20,7 @@ SET GLOBAL foreign_key_checks = 0;
 "
 
 pv /www/backups/db/example.sql.gz | gunzip | mysql -u foo -p bar
+# restore.py import_db.sh
 
 mysql -e "
 COMMIT;

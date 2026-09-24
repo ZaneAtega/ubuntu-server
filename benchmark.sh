@@ -1,3 +1,5 @@
+lshw -short
+
 sysbench cpu --cpu-max-prime=20000 run
 sysbench memory run
 
