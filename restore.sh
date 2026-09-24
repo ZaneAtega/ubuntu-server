@@ -1,5 +1,15 @@
 unzip /www/backups/backups.zip -d /www/wwwroot
 
+TMP_DIR=$(mktemp -d)
+unzip /www/backups/wordpress-*.zip -d "$TMP_DIR"
+
+for site in /www/wwwroot/test; do
+    cp -r "$TMP_DIR/wordpress/wp-admin" "$site"/
+    cp -r "$TMP_DIR/wordpress/wp-includes" "$site"/
+done
+
+rm -rf "$TMP_DIR"
+
 bash /www/source/themes/import_themes_and_ssl.sh
 bash /www/source/source.sh
 
@@ -10,6 +20,7 @@ find /www/wwwroot -type f -exec chmod 644 {} \;
 unzip /www/backups/db.zip -d /www/backups/db
 
 # CREATE DATABASE, CREATE USER, GRANT, FLUSH PRIVILEGES
+# restore.py restore_sql_ready.sql
 
 # mysql -e "SELECT @@GLOBAL.autocommit, @@GLOBAL.unique_checks, @@GLOBAL.foreign_key_checks;"
 
