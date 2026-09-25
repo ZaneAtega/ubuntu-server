@@ -10,4 +10,4 @@ sysbench fileio prepare
 sysbench fileio --file-test-mode=rndrw run
 sysbench fileio cleanup
 
-stress-ng --cpu 4 --timeout 30s
+stress-ng --cpu 4 --timeout 30s --metrics
