@@ -43,7 +43,7 @@ fi
 
 # NGINX
 
-nginx_conf='/www/nginx.conf'
+nginx_conf='/etc/nginx/nginx.conf'
 
 match=$(grep -E '^worker_processes|^worker_rlimit_nofile' "$nginx_conf") # worker_processes auto; # one worker per CPU core
 
