@@ -3,7 +3,7 @@ unzip /www/backups/backups.zip -d /
 TMP_DIR=$(mktemp -d)
 unzip /www/backups/wordpress-*.zip -d "$TMP_DIR"
 
-for site in /www/wwwroot/test; do
+for site in /www/wwwroot/*; do
     cp -r "$TMP_DIR/wordpress/wp-admin" "$site"/
     cp -r "$TMP_DIR/wordpress/wp-includes" "$site"/
 done
@@ -20,7 +20,7 @@ find /www/wwwroot -type f -exec chmod 644 {} \;
 unzip /www/backups/db.zip -d /www/backups/db
 
 # CREATE DATABASE, CREATE USER, GRANT, FLUSH PRIVILEGES
-# restore.py restore_sql_ready.sql
+# restore.py restore_sql.sql
 
 # mysql -e "SELECT @@GLOBAL.autocommit, @@GLOBAL.unique_checks, @@GLOBAL.foreign_key_checks;"
 
@@ -39,3 +39,5 @@ SET GLOBAL foreign_key_checks = 1;
 SET GLOBAL unique_checks = 1;
 SET GLOBAL autocommit = 1;
 "
+
+# restore_sql_2.sql

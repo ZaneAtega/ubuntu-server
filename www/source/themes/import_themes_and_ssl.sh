@@ -6,4 +6,4 @@ done
 
 rm -rf /tmp/all-themes
 
-cp -a "/www/source/etc letsencrypt live/." /etc/letsencrypt/live/
+cp -a '/www/source/etc letsencrypt live/.' /etc/letsencrypt/live/

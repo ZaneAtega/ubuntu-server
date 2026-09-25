@@ -14,4 +14,4 @@ zip -r "$OUTPUT" .
 
 rm -rf "$TMP_DIR"
 
-cp -a /etc/letsencrypt/live/. "/www/source/etc letsencrypt live/"
+cp -a /etc/letsencrypt/live/. '/www/source/etc letsencrypt live/'

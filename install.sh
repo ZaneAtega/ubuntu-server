@@ -1,6 +1,7 @@
 apt update && apt full-upgrade -y
 
 apt install sysbench fio stress-ng -y
+# benchmark.sh
 
 # apt list --installed | grep apache
 systemctl stop apache2
