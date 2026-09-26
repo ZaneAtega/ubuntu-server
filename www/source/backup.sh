@@ -1,6 +1,6 @@
 rm -f /www/backups/backups.zip
 
-zip='zip -r /www/backups/backups.zip /www/wwwroot/ -x "*/uploads/*" "*/wp-content/uploads/*" "*/wp-admin/*" "*/wp-includes/*"'
+zip='zip -r /www/backups/backups.zip /www/wwwroot/ -x "*/uploads/*" "*/wp-content/uploads/*" "*/wp-admin/*" "*/wp-includes/*" "*/h-cache/*"'
 
 sql=''
 TMP_DIR=$(mktemp -d)
