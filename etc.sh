@@ -168,9 +168,9 @@ declare -A mariadb=(
     # 0: All tables share the same ibdata1
 )
 
-match=$(grep -E "$(IFS='|'; echo "${!mariadb[*]}")" "$mariadb_cnf")
+grep -E "$(IFS='|'; echo "${!mariadb[*]}")" "$mariadb_cnf"
 
-if read -r -p "$match [Y/n] " answer && [[ "${answer,,}" == 'y' ]]; then
+if read -r -p "[Y/n] " answer && [[ "${answer,,}" == 'y' ]]; then
     options=''
 
     for option in "${!mariadb[@]}"; do

@@ -1,13 +1,13 @@
-for site in /www/wwwroot/*/; do
+for site in /www/wwwroot/*; do
     echo "=== $site ==="
     sudo -u www-data -- php /www/wwwroot/wp-cli.phar core verify-checksums --path="$site"
     sudo -u www-data -- php /www/wwwroot/wp-cli.phar plugin verify-checksums --all --path="$site"
 done
 
-find /www/wwwroot/*/ \
+find /www/wwwroot/* \
     -type d \( -name wp-admin -o -name wp-content -o -name wp-includes -o -path '*/.well-known/acme-challenge' \) -prune -o \( \
     -type f \
-        ! -name '*.webp' ! -name '*.json' ! -name '*.html' ! -name '*.xml' ! -name 'wp-*.php' \
+        ! -name 'readme*.html' ! -name 'sitemap-*.xml' ! -name 'wp-*.php' \
         ! -name '.user.ini' ! -name 'index.php' ! -name 'license.txt' ! -name 'robots.txt' ! -name 'xmlrpc.php' -o \
     -type l \) \
     -printf '%p\n' | sort -u
@@ -30,9 +30,8 @@ while read -r file; do
         line="${line//[[:space:]]/}"
         # [[ $(echo "$line" | awk "/^define\('[A-Za-z_][A-Za-z0-9_]*',(true|false|'[^']*')\);$/ { print \"yes\"; exit }") == "yes" ]] && continue
         [[
-           "$line" == "define('FS_METHOD','direct');" ||
            "$line" == "define('ABSPATH',__DIR__.'/');" ||
-           $(echo "$line" | awk "/^define\('(WP2FA_ENCRYPT_KEY|DB_NAME|DB_USER|DB_PASSWORD|DB_HOST|DB_CHARSET|DB_COLLATE|AUTH_KEY|SECURE_AUTH_KEY|LOGGED_IN_KEY|NONCE_KEY|AUTH_SALT|SECURE_AUTH_SALT|LOGGED_IN_SALT|NONCE_SALT|WP_CACHE_KEY_SALT|WP_AUTO_UPDATE_CORE)','[^']*'\);$/ { print \"yes\"; exit }") == "yes" ||
+           $(echo "$line" | awk "/^define\('(WP2FA_ENCRYPT_KEY|DB_NAME|DB_USER|DB_PASSWORD|DB_HOST|DB_CHARSET|DB_COLLATE|AUTH_KEY|SECURE_AUTH_KEY|LOGGED_IN_KEY|NONCE_KEY|AUTH_SALT|SECURE_AUTH_SALT|LOGGED_IN_SALT|NONCE_SALT|WP_CACHE_KEY_SALT|FS_METHOD|WP_AUTO_UPDATE_CORE)','[^']*'\);$/ { print \"yes\"; exit }") == "yes" ||
            $(echo "$line" | awk "/^define\('(WP_POST_REVISIONS|WP_DEBUG|WP_DEBUG_DISPLAY|WP_DEBUG_LOG|DISALLOW_FILE_EDIT|DISABLE_WP_CRON|WP_AUTO_UPDATE_CORE|WP_REDIS_PERSISTENT|WP_REDIS_DISABLE_METRICS)',(true|false)\);$/ { print \"yes\"; exit }") == "yes"
         ]] && continue
 
@@ -43,12 +42,15 @@ done
 TMP_THEMES=$(mktemp -d)
 unzip -q /www/source/themes/all-themes.zip -d "$TMP_THEMES"
 
-for site in /www/wwwroot/*/; do
+for site in /www/wwwroot/*; do
     name=$(basename "$site")
     content="${site}wp-content"
     uploads="${content}/uploads"
 
     echo "=== $name ==="
+
+    [[ "$(cat "$site/.user.ini" 2>/dev/null)" == "open_basedir=$site/:/tmp/
+session.save_path=${site}/sessions" ]] || echo "BAD: $site/.user.ini"
 
     find "$content" -mindepth 1 -maxdepth 1 \
         ! -name 'index.php' ! -name 'object-cache.php' ! -name 'debug.log' \
