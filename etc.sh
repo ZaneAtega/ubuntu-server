@@ -43,9 +43,35 @@ fi
 
 # NGINX
 
+: <<'EOF'
+worker_processes auto; # one worker per CPU core
+worker_rlimit_nofile 65535;
+
+events {
+	worker_connections 65535;
+	# ulimit -n
+	use epoll;
+}
+
+http {
+	sendfile on; # Lets nginx send files directly from disk -> network
+	tcp_nopush on; # Bundles HTTP response headers + file chunks into efficient packet sizes before sending
+	tcp_nodelay on; # Disables Nagle's algorithm -> sends small packets immediately
+
+	log_format custom_combined '$remote_addr - $remote_user [$time_local] '
+	                           '"$request" $status $request_length $upstream_header_time $body_bytes_sent '
+	                           '"$http_referer" "$http_user_agent"';
+
+	access_log /var/log/nginx/access.log custom_combined;
+
+	gzip on;
+	gzip_comp_level 4; # 9 = max compression, heavy CPU
+}
+EOF
+
 nginx_conf='/etc/nginx/nginx.conf'
 
-match=$(grep -E '^worker_processes|^worker_rlimit_nofile' "$nginx_conf") # worker_processes auto; # one worker per CPU core
+match=$(grep -E '^worker_processes|^worker_rlimit_nofile' "$nginx_conf")
 
 if read -r -p "$match [Y/n] " answer && [[ "${answer,,}" == 'y' ]]; then
     sed -i "2a worker_rlimit_nofile 65535;" "$nginx_conf"
@@ -60,12 +86,10 @@ if read -r -p "$match $epoll [Y/n] " answer && [[ "${answer,,}" == 'y' ]]; then
     sed -i "${line}a use epoll;" "$nginx_conf"
 fi
 
-# sendfile on; # Lets nginx send files directly from disk -> network
-# tcp_nopush on; # Bundles HTTP response headers + file chunks into efficient packet sizes before sending
 grep -E '^[[:space:]]*(sendfile|tcp_nopush|tcp_nodelay|gzip)[[:space:]]' "$nginx_conf"
 
 if read -r -p "[Y/n] " answer && [[ "${answer,,}" == 'y' ]]; then
-    sed -i '/^[[:space:]]*tcp_nopush /a tcp_nodelay on;' "$nginx_conf" # Disables Nagle's algorithm -> sends small packets immediately
+    sed -i '/^[[:space:]]*tcp_nopush /a tcp_nodelay on;' "$nginx_conf"
 fi
 
 match=$(grep -n '^[[:space:]]*access_log' "$nginx_conf")
