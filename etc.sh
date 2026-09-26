@@ -35,7 +35,7 @@ if read -r -p "$match [Y/n] " answer && [[ "${answer,,}" == 'y' ]]; then
 save ""
 
 # redis-cli INFO stats | grep -E 'keyspace_hits|keyspace_misses|evicted_keys'
-maxmemory 1gb
+maxmemory 512mb
 
 maxmemory-policy allkeys-lru
 EOF
@@ -153,7 +153,7 @@ declare -A mariadb=(
     # SHOW GLOBAL STATUS WHERE Variable_name IN ('Innodb_buffer_pool_read_requests', 'Innodb_buffer_pool_reads', 'Innodb_buffer_pool_wait_free');
     # (1 - Innodb_buffer_pool_reads / Innodb_buffer_pool_read_requests) * 100
     # SHOW GLOBAL STATUS WHERE Variable_name IN ('Innodb_buffer_pool_pages_total', 'Innodb_buffer_pool_pages_data');
-    [innodb_buffer_pool_size]=
+    [innodb_buffer_pool_size]= # / 0.016 > Innodb_buffer_pool_pages_data
     [innodb_log_buffer_size]=32M # SHOW GLOBAL STATUS WHERE Variable_name = 'Innodb_log_waits';
 
     [innodb_flush_method]=O_DIRECT # InnoDB bypasses the OS filesystem cache and writes directly to disk
@@ -282,3 +282,5 @@ xdebug.mode = profile
 xdebug.start_with_request = trigger
 xdebug.output_dir = /tmp/xdebug
 EOF
+
+# /etc/php/8.3/cli/php.ini
