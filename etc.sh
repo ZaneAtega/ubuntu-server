@@ -43,6 +43,8 @@ maxmemory-policy allkeys-lru
 EOF
 fi
 
+systemctl restart redis-server
+
 # NGINX
 
 : <<'EOF'
@@ -184,7 +186,8 @@ systemctl restart mariadb
 
 # PHP
 
-php_ini='/etc/php/8.3/fpm/php.ini'
+php_version=$(basename /etc/php/*)
+php_ini="/etc/php/$php_version/fpm/php.ini"
 
 match=$(grep -n '^;cgi\.fix_pathinfo' "$php_ini")
 
@@ -238,7 +241,7 @@ for directive in "${!opcache[@]}"; do
     fi
 done
 
-www_conf='/etc/php/8.3/fpm/pool.d/www.conf'
+www_conf="/etc/php/$php_version/fpm/pool.d/www.conf"
 
 # See memory usage per worker:
 # ps -eo pid,rss,cmd | grep php-fpm
@@ -278,13 +281,13 @@ for directive in "${!fpm[@]}"; do
     fi
 done
 
-cat > /etc/php/8.3/mods-available/xdebug.ini <<'EOF'
+cat > "/etc/php/$php_version/mods-available/xdebug.ini" <<'EOF'
 zend_extension = xdebug.so
 xdebug.mode = profile
 xdebug.start_with_request = trigger
 xdebug.output_dir = /tmp/xdebug
 EOF
 
-systemctl reload php8.3-fpm
+systemctl reload "php$php_version-fpm"
 
-# /etc/php/8.3/cli/php.ini
+# /etc/php/*/cli/php.ini

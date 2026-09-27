@@ -16,7 +16,8 @@ mysql_secure_installation
 # Change the root password? n
 # Y
 
-apt install php8.3-fpm php8.3-mysql php8.3-redis redis-server php8.3-xdebug php8.3-gd php8.3-mbstring -y
+php='php8.5'
+apt install "$php-fpm" "$php-mysql" "$php-redis" redis-server "$php-xdebug" "$php-gd" "$php-mbstring" "$php-xml" -y
 mkdir -p /tmp/xdebug
 chown www-data:www-data /tmp/xdebug
 phpdismod xdebug
