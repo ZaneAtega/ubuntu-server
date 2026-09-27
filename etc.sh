@@ -26,6 +26,8 @@ session required pam_limits.so
 EOF
 fi
 
+sysctl -p
+
 # Redis
 
 match=$(grep -E '^[[:space:]]*(save|maxmemory)' /etc/redis/redis.conf)
@@ -116,9 +118,7 @@ if read -r -p "$match [Y/n] " answer && [[ "${answer,,}" == 'y' ]]; then
     sed -i "${match%%:*}a gzip_comp_level 4;" "$nginx_conf"
 fi
 
-rm /etc/nginx/sites-enabled/default
-ln -s /etc/nginx/sites-available/site.conf /etc/nginx/sites-enabled/
-ln -s /etc/nginx/sites-available/s3.conf /etc/nginx/sites-enabled/
+systemctl restart nginx
 
 # MySQL
 
@@ -179,6 +179,8 @@ if read -r -p "[Y/n] " answer && [[ "${answer,,}" == 'y' ]]; then
 
     sed -i "$(grep -n '^\[mysqld\]' "$mariadb_cnf" | cut -d: -f1)a ${options//$'\n'/\\$'\n'}" "$mariadb_cnf"
 fi
+
+systemctl restart mariadb
 
 # PHP
 
@@ -282,5 +284,7 @@ xdebug.mode = profile
 xdebug.start_with_request = trigger
 xdebug.output_dir = /tmp/xdebug
 EOF
+
+systemctl reload php8.3-fpm
 
 # /etc/php/8.3/cli/php.ini
