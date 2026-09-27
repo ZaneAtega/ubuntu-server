@@ -1,4 +1,5 @@
-rm -f /www/backup.log /www/backups/backups.zip /www/backups/db.zip /tmp/*/*.sql.gz
+: > /www/backup.log
+rm -f /www/backups/backups.zip /www/backups/db.zip /tmp/*/*.sql.gz
 
 zip='zip -r /www/backups/backups.zip /www/wwwroot/ -x "*/uploads/*" "*/wp-content/uploads/*" "*/wp-admin/*" "*/wp-includes/*" "*/h-cache/*"'
 
