@@ -248,7 +248,7 @@ done
 www_conf="/etc/php/$php_version/fpm/pool.d/www.conf"
 
 # See memory usage per worker:
-# ps -eo pid,rss,cmd | grep php-fpm
+# ps aux | grep php
 # PHP RAM / ^ = pm.max_children
 # memory_limit * pm.max_children = max RAM usage
 
