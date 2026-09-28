@@ -36,14 +36,18 @@ if read -r -p "$match [Y/n] " answer && [[ "${answer,,}" == 'y' ]]; then
     tee -a /etc/redis/redis.conf > /dev/null <<'EOF'
 save ""
 
-# redis-cli INFO stats | grep -E 'keyspace_hits|keyspace_misses|evicted_keys'
-maxmemory 512mb
+# redis-cli INFO | grep -E 'used_memory_human|keyspace_hits|keyspace_misses|evicted_keys'
+maxmemory 64mb
 
 maxmemory-policy allkeys-lru
 EOF
 fi
 
 systemctl restart redis-server
+
+# redis-cli --scan | grep -oE 'wp:[^:]+' | sort | uniq -c | sort -nr
+# timeout 30 redis-cli MONITOR > /tmp/redis-monitor.log
+# grep -E '"(GET|MGET)"' /tmp/redis-monitor.log | grep -oE 'wp:[^:]+' | sort | uniq -c | sort -nr
 
 # NGINX
 
@@ -196,10 +200,10 @@ if read -r -p "$match [Y/n] " answer && [[ "${answer,,}" == 'y' ]]; then
 fi
 
 declare -A php=(
-    [post_max_size]=
-    [memory_limit]=
-    [max_execution_time]=
-    [upload_max_filesize]=
+    [post_max_size]=2M
+    [memory_limit]=192M
+    [max_execution_time]=60
+    [upload_max_filesize]=2M
     [max_file_uploads]=1
 )
 
@@ -248,7 +252,7 @@ www_conf="/etc/php/$php_version/fpm/pool.d/www.conf"
 # PHP RAM / ^ = pm.max_children
 # memory_limit * pm.max_children = max RAM usage
 
-pm=
+pm='static'
 
 match=$(grep -n "^pm =" "$www_conf")
 
@@ -258,6 +262,7 @@ fi
 
 declare -A fpm=(
     [max_children]=
+
     [start_servers]= # How many PHP workers start immediately when PHP-FPM launches
     [min_spare_servers]= # Minimum idle workers PHP-FPM tries to keep ready
     [max_spare_servers]= # Maximum idle workers allowed
