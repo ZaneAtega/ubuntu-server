@@ -66,7 +66,7 @@ http {
 	tcp_nopush on; # Bundles HTTP response headers + file chunks into efficient packet sizes before sending
 	tcp_nodelay on; # Disables Nagle's algorithm -> sends small packets immediately
 
-	log_format custom_combined '$remote_addr - $remote_user [$time_local] '
+	log_format custom_combined '$http_cf_connecting_ip $http_cf_ipcountry - $remote_user [$time_local] '
 	                           '"$request" $status $request_length $upstream_header_time $body_bytes_sent '
 	                           '"$http_referer" "$http_user_agent"';
 
